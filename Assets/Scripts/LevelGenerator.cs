@@ -5,23 +5,24 @@ using System.Linq;
 
 public class LevelGenerator : MonoBehaviour
 {
+    public float delta = 0.4f;
     int[,] levelMap =
         {
-        {1,2,2,2,2,2,2,2,2,2,2,2,2,7},
+        {1,2,2,2,2,2,2,2,2,2,2,2,2,2},
         {2,5,5,5,5,5,5,5,5,5,5,5,5,4},
         {2,5,3,4,4,3,5,3,4,4,4,3,5,4},
         {2,6,4,0,0,4,5,4,0,0,0,4,5,4},
-        {2,5,3,4,4,3,5,3,4,4,4,3,5,3},
+        {2,5,3,4,4,3,5,3,4,4,4,3,5,4},
         {2,5,5,5,5,5,5,5,5,5,5,5,5,5},
         {2,5,3,4,4,3,5,3,3,5,3,4,4,4},
-        {2,5,3,4,4,3,5,4,4,5,3,4,4,3},
+        {2,5,3,4,4,3,5,4,4,5,3,4,4,4},
         {2,5,5,5,5,5,5,4,4,5,5,5,5,4},
-        {1,2,2,2,2,1,5,4,3,4,4,3,0,4},
-        {0,0,0,0,0,2,5,4,3,4,4,3,0,3},
+        {1,2,2,2,2,1,5,4,4,4,4,3,0,4},
+        {0,0,0,0,0,2,5,4,4,4,4,3,0,4},
         {0,0,0,0,0,2,5,4,4,0,0,0,0,0},
         {0,0,0,0,0,2,5,4,4,0,3,4,4,0},
-        {2,2,2,2,2,1,5,3,3,0,4,0,0,0},
-        {0,0,0,0,0,0,5,0,0,0,4,0,0,0},
+        {0,0,0,0,0,2,5,3,3,0,4,0,0,0},
+        {0,0,0,0,0,2,5,0,0,0,4,0,0,0},
         };
 
     // Start is called before the first frame update
@@ -29,9 +30,7 @@ public class LevelGenerator : MonoBehaviour
     {
         GameObject[] manual_lvl = GameObject.FindGameObjectsWithTag("Manual-lvl");
         foreach(GameObject go in manual_lvl)
-        {
             GameObject.Destroy(go);
-        }
 
         // find template object
         GameObject[] templates = new GameObject[8];
@@ -43,81 +42,51 @@ public class LevelGenerator : MonoBehaviour
         templates[6] = GameObject.Find("Power Pellet template");
         templates[7] = GameObject.Find("t conjunct template");
 
-        float cur_row = 0f;
-        float cur_col = 0f;
-        GameObject topleft = new GameObject();
-        topleft.name = "topleft";
-        topleft.transform.position = Vector3.zero;
-        for (int i = 0; i < levelMap.GetLength(0); ++i)
+        //float cur_row = 0f;
+        //float cur_col = 0f;
+        GameObject level = new GameObject();
+        level.name = "Level";
+        level.transform.position = Vector3.zero;
+        for (int x = 1 - levelMap.GetLength(1); x <= levelMap.GetLength(1) - 1; ++x)//
         {
-            for(int j = 0; j < levelMap.GetLength(1); ++j)
+            for(int y = 1 - levelMap.GetLength(0); y <= levelMap.GetLength(0) - 1; ++y)//
             {
-                int type = levelMap[i, j];
+                
+                int type = GetTypeFromXY(x, y);
                 if (type == 0)
-                {
-                    cur_col += 0.4f;
                     continue;
-                }
                 GameObject curobj = GameObject.Instantiate(templates[type]);
-                curobj.transform.position = new Vector3(cur_col, cur_row, 0f);
-                curobj.transform.parent = topleft.transform;
+                curobj.transform.position = new Vector3(x * delta, y * delta, 0f);
+                curobj.transform.parent = level.transform;
                 if (type == 1)
                 {
-                    int[] types = new int[] { 2 };
-                    Vector3 wall_check = checkRotation(i, j, types);
-                    if(wall_check != Vector3.zero)
-                    {
-                        curobj.transform.rotation = Quaternion.Euler(wall_check);
-                    }
-                    else
-                    {
-                        types = new int[] { 1, 2 };
-                        wall_check = checkRotation(i, j, types);
-                        curobj.transform.rotation = Quaternion.Euler(wall_check);
-                    }
+                    if (GetTypeFromXY(x - 1,y) == 2)
+                        curobj.transform.Rotate(Vector3.up, 180);
+                    if (GetTypeFromXY(x, y + 1) == 2)
+                        curobj.transform.Rotate(Vector3.right, 180);
                 }
-                else if(type == 3)
+                if (type == 3)
                 {
-                    int[] types = new int[] { 4 };
-                    Vector3 wall_check = checkRotation(i, j, types);
-                    if (wall_check != Vector3.zero)
-                    {
-                        curobj.transform.rotation = Quaternion.Euler(wall_check);
-                    }
-                    else
-                    {
-                        types = new int[] { 3, 4 };
-                        wall_check = checkRotation(i, j, types);
-                        curobj.transform.rotation = Quaternion.Euler(wall_check);
-                    }
+                    if (GetTypeFromXY(x - 1, y) == 4 || GetTypeFromXY(x - 1, y) == 3)
+                        curobj.transform.Rotate(Vector3.up, 180);
+                    if (GetTypeFromXY(x, y + 1) == 4 || GetTypeFromXY(x, y + 1) == 3)
+                        curobj.transform.Rotate(Vector3.right, 180);
                 }
                 curobj.GetComponent<SpriteRenderer>().enabled = true;
                 if (curobj.GetComponent<Animator>())
                 {
                     curobj.GetComponent<Animator>().enabled = true;
                 }
-                cur_col += 0.4f;
             }
-            cur_col = 0f;
-            cur_row -= 0.4f; 
         }
-        // get top-right
-        GameObject topright = GameObject.Instantiate(topleft);
-        topright.transform.rotation = Quaternion.Euler(new Vector3(0f, 180f, 0f));
-        topright.transform.position = new Vector3(topleft.transform.position.x + 2 * (0.4f * levelMap.GetLength(1)) - 0.2f, topleft.transform.position.y, topleft.transform.position.z);
-        GameObject top = new GameObject("top");
-        topleft.transform.parent = top.transform;
-        topright.transform.parent = top.transform;
-        GameObject bottom = GameObject.Instantiate(top);
-        bottom.transform.rotation = Quaternion.Euler(new Vector3(180f, 0f, 0f));
-        bottom.transform.position = new Vector3(top.transform.position.x, top.transform.position.y - 2 * (0.4f * levelMap.GetLength(1)) + 0.2f, top  .transform.position.z);
-        GameObject level = new GameObject("level");
-        top.transform.parent = level.transform;
-        bottom.transform.parent = level.transform;
-        level.transform.position = new Vector3(-10f, 4.5f, 0f );
-    
     }
-
+    public int GetTypeFromXY(int x,int y)
+    {
+        int absI = levelMap.GetLength(0) - 1 - (y < 0 ? -y : y), absJ = levelMap.GetLength(1) - 1 - (x < 0 ? -x : x);
+        if (absI < 0 || absJ < 0 || absI >= levelMap.GetLength(0) || absJ >= levelMap.GetLength(1))
+            return 0;
+        return levelMap[absI, absJ];
+    }
     Vector3 checkRotation(int i, int j, int[] targetType)
     {
         var rotationVector = Vector3.zero;
