@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,37 +28,7 @@ public class PacStudentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        #region
-        //int targetType;
-        ////到达目标点时，更新位置，如果lastInput目标可达，更新curentInput
-        //if (new Vector2(targetPos.x*levelGenerator.delta-transform.position.x, targetPos.y * levelGenerator.delta - transform.position.y).magnitude<=0.0001f)
-        //{
-        //    lastPos = targetPos;
-        //    transform.position = new Vector3(targetPos.x * levelGenerator.delta, targetPos.y * levelGenerator.delta, 0);
-        //    Vector2Int lastInputTarget = GetTargetPos(lastInput);
-        //    targetType = levelGenerator.GetTypeFromXY(lastInputTarget.x, lastInputTarget.y);
-        //    if (targetType == 0 || targetType == 5 || targetType == 6)
-        //    {
-        //        curentInput = lastInput;
-        //        targetPos = lastInputTarget;
-        //    }
-        //}
-        ////未到达目标点时
-        ////else
-        //{
-        //    //基于curentInput的目标点
-        //    Vector2Int curInputTarget = GetTargetPos(curentInput);
-        //    targetType = levelGenerator.GetTypeFromXY(curInputTarget.x, curInputTarget.y);
-        //    //判断目标点可达与否，来更新curentInput
-        //    if (targetType == 0 || targetType == 5 || targetType == 6)
-        //    {
-        //        targetPos = curInputTarget;
-        //        curentInput = lastInput;
-        //    }
-        //    Move(curentInput);
-        //}
-        #endregion
-        if (new Vector2(targetPos.x * levelGenerator.delta - transform.position.x, targetPos.y * levelGenerator.delta - transform.position.y).magnitude <= 0.0001f)
+        if (new Vector2(targetPos.x * levelGenerator.delta - transform.position.x, targetPos.y * levelGenerator.delta - transform.position.y).magnitude <= 0.01f)
         {
             lastPos = targetPos;
             Vector2Int lastInputTarget = GetTargetPos(lastInput);
@@ -83,36 +52,55 @@ public class PacStudentController : MonoBehaviour
             curentInput = InputKey.None;
         Move(curentInput);
     }
+    [SerializeField]
+    private float speed = 0.1f;
     private void Move(InputKey input)
     {
         // top
         if (input==InputKey.Up)
         {
             animator.SetFloat("dir", 0.0f);
-            PacStudent.position = Vector3.Lerp(PacStudent.position, new Vector3(targetPos.x, targetPos.y, 0) * levelGenerator.delta, 0.1f);
+            PacStudent.position = Vector3.Lerp(PacStudent.position, new Vector3(targetPos.x, targetPos.y, 0) * levelGenerator.delta, speed);
         }
         else if (input == InputKey.Right)
         {
             // right
             animator.SetFloat("dir", 3.0f);
-            PacStudent.position = Vector3.Lerp(PacStudent.position, new Vector3(targetPos.x, targetPos.y, 0) * levelGenerator.delta, 0.1f);
+            PacStudent.position = Vector3.Lerp(PacStudent.position, new Vector3(targetPos.x, targetPos.y, 0) * levelGenerator.delta, speed);
         }
         else if (input == InputKey.Down)
         {
             // down
             animator.SetFloat("dir", 2.0f);
-            PacStudent.position = Vector3.Lerp(PacStudent.position, new Vector3(targetPos.x, targetPos.y, 0) * levelGenerator.delta, 0.1f);
+            PacStudent.position = Vector3.Lerp(PacStudent.position, new Vector3(targetPos.x, targetPos.y, 0) * levelGenerator.delta, speed);
         }
         else if (input == InputKey.Left)
         {
             // left
             animator.SetFloat("dir", 1.0f);
-            PacStudent.position = Vector3.Lerp(PacStudent.position, new Vector3(targetPos.x, targetPos.y, 0) * levelGenerator.delta, 0.1f);
+            PacStudent.position = Vector3.Lerp(PacStudent.position, new Vector3(targetPos.x, targetPos.y, 0) * levelGenerator.delta, speed);
         }
         //else
         //{
         //    animator.SetFloat("dir", 0.0f);
         //}
+    }
+    public void Teleport(Vector2Int pos)
+    {
+        transform.position = new Vector3(pos.x*levelGenerator.delta, pos.y * levelGenerator.delta,0);
+        targetPos = pos;
+    }
+    private Vector2Int startPos = new Vector2Int(-12, 13);
+    private void Respawn()
+    {
+        curentInput = InputKey.Up;
+        lastInput = InputKey.Up;
+        Teleport(startPos);
+        animator.SetFloat("dir", 0.0f);
+    }
+    public void Die()
+    {
+        Respawn();
     }
     //基于输入求解目标点
     private Vector2Int GetTargetPos(InputKey input)

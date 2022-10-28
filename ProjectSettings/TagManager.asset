@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Manual-lvl
+  - Pacman
+  - Pellet
   layers:
   - Default
   - TransparentFX
@@ -43,4 +46,7 @@ TagManager:
     locked: 0
   - name: Text
     uniqueID: 2486412997
+    locked: 0
+  - name: Pacman
+    uniqueID: 2060525055
     locked: 0

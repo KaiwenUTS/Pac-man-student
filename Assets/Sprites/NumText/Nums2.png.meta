@@ -109,11 +109,11 @@ TextureImporter:
       name: Nums2_0
       rect:
         serializedVersion: 2
-        x: 72
+        x: 59
         y: 144
-        width: 120
+        width: 144
         height: 216
-      alignment: 0
+      alignment: 9
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -130,11 +130,11 @@ TextureImporter:
       name: Nums2_1
       rect:
         serializedVersion: 2
-        x: 240
+        x: 209
         y: 144
-        width: 72
+        width: 144
         height: 216
-      alignment: 0
+      alignment: 9
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -151,11 +151,11 @@ TextureImporter:
       name: Nums2_2
       rect:
         serializedVersion: 2
-        x: 360
+        x: 346
         y: 144
-        width: 120
+        width: 144
         height: 216
-      alignment: 0
+      alignment: 9
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -172,11 +172,11 @@ TextureImporter:
       name: Nums2_3
       rect:
         serializedVersion: 2
-        x: 528
+        x: 514
         y: 144
-        width: 120
+        width: 144
         height: 216
-      alignment: 0
+      alignment: 9
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -193,11 +193,11 @@ TextureImporter:
       name: Nums2_4
       rect:
         serializedVersion: 2
-        x: 696
+        x: 684
         y: 144
-        width: 120
+        width: 144
         height: 216
-      alignment: 0
+      alignment: 9
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -214,11 +214,11 @@ TextureImporter:
       name: Nums2_5
       rect:
         serializedVersion: 2
-        x: 864
+        x: 850
         y: 144
-        width: 120
+        width: 144
         height: 216
-      alignment: 0
+      alignment: 9
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -235,11 +235,11 @@ TextureImporter:
       name: Nums2_6
       rect:
         serializedVersion: 2
-        x: 1008
+        x: 996
         y: 144
-        width: 120
+        width: 144
         height: 216
-      alignment: 0
+      alignment: 9
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -256,11 +256,11 @@ TextureImporter:
       name: Nums2_7
       rect:
         serializedVersion: 2
-        x: 1176
+        x: 1164
         y: 144
-        width: 120
+        width: 144
         height: 216
-      alignment: 0
+      alignment: 9
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -281,7 +281,7 @@ TextureImporter:
         y: 144
         width: 144
         height: 216
-      alignment: 0
+      alignment: 9
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -298,11 +298,11 @@ TextureImporter:
       name: Nums2_9
       rect:
         serializedVersion: 2
-        x: 1488
+        x: 1475
         y: 144
-        width: 120
+        width: 144
         height: 216
-      alignment: 0
+      alignment: 9
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
