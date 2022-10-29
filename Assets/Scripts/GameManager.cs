@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
         if (!Instance)
             Instance = this;
         scoreText.text= "<sprite=0>";
-        gameTimerText.text = TranslateSecToRichText(0.0f);
+        gameTimerText.text = Utils.TranslateSecToRichText(0.0f);
         startPanel.SetActive(true);
         endPanel.SetActive(false);
         if (IsOn)
@@ -42,24 +42,7 @@ public class GameManager : MonoBehaviour
     public void AddScore(int n)
     {
         score += n;
-        scoreText.text = TranslateNumToRichText(score);
-    }
-    private string TranslateNumToRichText(int n, int len = 1)
-    {
-        string res = "";
-        Stack<int> reverseNum = new Stack<int>();
-        while (n > 0)
-        {
-            reverseNum.Push(n % 10);
-            n = n / 10;
-        }
-        while (reverseNum.Count < len)
-            reverseNum.Push(0);
-        while (reverseNum.Count > 0)
-        {
-            res += $"<sprite={reverseNum.Pop()}>";
-        }
-        return res;
+        scoreText.text = Utils.TranslateNumToRichText(score);
     }
     [SerializeField]
     private Ghost[] ghosts;
@@ -122,11 +105,11 @@ public class GameManager : MonoBehaviour
     {
         if (!IsOn)
             return;
-        gameTimerText.text = TranslateSecToRichText(Time.realtimeSinceStartup);
+        gameTimerText.text = Utils.TranslateSecToRichText(Time.realtimeSinceStartup);
         if (powerLeftTime > 0)
         {
             powerLeftTime -= Time.deltaTime;
-            ghostTimerText.text = TranslateSecToRichText(powerLeftTime);
+            ghostTimerText.text = Utils.TranslateSecToRichText(powerLeftTime);
             if (powerLeftTime < 3 && powerLeftTime > 0)
                 foreach (Ghost ghost in ghosts)
                     ghost.SetGhostState(GhostState.Recovering);
@@ -137,13 +120,5 @@ public class GameManager : MonoBehaviour
                 ghostTimerText.gameObject.SetActive(false);
             }
         }
-    }
-    private string TranslateSecToRichText(float t)
-    {
-        int sec = Mathf.FloorToInt(t);
-        int ms = Mathf.FloorToInt((t - sec) * 100);
-        int min = sec / 60;
-        sec = sec % 60;
-        return TranslateNumToRichText(min,2) + ":" + TranslateNumToRichText(sec,2) + ":" + TranslateNumToRichText(ms,2);
     }
 }
