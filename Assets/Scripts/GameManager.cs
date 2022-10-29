@@ -94,6 +94,11 @@ public class GameManager : MonoBehaviour
             return;
         IsOn = false;
         endPanel.SetActive(true);
+        if (PlayerPrefs.HasKey("Score") && PlayerPrefs.GetInt("Score")<score)
+        {
+            PlayerPrefs.SetInt("Score", score);
+            PlayerPrefs.SetFloat("Time", Time.realtimeSinceStartup - gameStartTime);
+        }
         StartCoroutine(WaitForExit());
     }
     private IEnumerator WaitForExit()
