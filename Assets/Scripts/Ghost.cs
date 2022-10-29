@@ -53,11 +53,9 @@ public class Ghost : MonoBehaviour
     private Vector3 startPos;
     private IEnumerator Respawn()
     {
-        AudioController.Instance.SetAudio(2);
         yield return new WaitForSeconds(5);
         transform.position = startPos;
         GetComponent<Collider2D>().enabled = true;
         animator.SetTrigger("WalkingTrigger");
-        AudioController.Instance.SetAudio(0);
     }
 }

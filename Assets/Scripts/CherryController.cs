@@ -15,8 +15,6 @@ public class CherryController : MonoBehaviour
     void Update()
     {
         transform.Translate(direction * Time.deltaTime);
-        if (transform.position.magnitude > 16)
-            Destroy(gameObject);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
