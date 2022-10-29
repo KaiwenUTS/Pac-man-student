@@ -85,6 +85,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         startPanel.SetActive(false);
         IsOn = true;
+        gameStartTime = Time.realtimeSinceStartup;
     }
     [SerializeField]
     private GameObject endPanel;
@@ -121,24 +122,51 @@ public class GameManager : MonoBehaviour
         if (n <= 0)
             heartImgs[0].SetActive(false);
     }
+    [SerializeField]
+    private AudioController audioController;
     private void Update()
     {
         if (!IsOn)
             return;
-        gameTimerText.text = Utils.TranslateSecToRichText(Time.realtimeSinceStartup);
+        gameTimerText.text = Utils.TranslateSecToRichText(Time.realtimeSinceStartup - gameStartTime);
         if (powerLeftTime > 0)
         {
+            if(audioController.GetAudioIndex()!=2)
+                audioController.SetAudio(1);
             powerLeftTime -= Time.deltaTime;
-            ghostTimerText.text = Utils.TranslateSecToRichText(powerLeftTime);
+            ghostTimerText.text = Utils.TranslateNumToRichText((int)powerLeftTime,2);
             if (powerLeftTime < 3 && powerLeftTime > 0)
                 foreach (Ghost ghost in ghosts)
                     ghost.SetGhostState(GhostState.Recovering);
             else if (powerLeftTime < 0)
             {
+                if (audioController.GetAudioIndex() != 2)
+                    audioController.SetAudio(0);
                 foreach (Ghost ghost in ghosts)
                     ghost.SetGhostState(GhostState.Walking);
                 ghostTimerText.gameObject.SetActive(false);
             }
         }
+        if (cherrySpawnTimeLeft > 0)
+        {
+            cherrySpawnTimeLeft -= Time.deltaTime;
+        }
+        else
+        {
+            SpawnCherry();
+            cherrySpawnTimeLeft = cherrySpawnTime;
+        }
+    }
+    [SerializeField]
+    private float cherrySpawnTime = 10, cherrySpawnTimeLeft = 1;
+    [SerializeField]
+    private GameObject cherryPrefab;
+    private void SpawnCherry()
+    {
+        Vector3 spawnPos = Vector3.zero;
+        int theta = Random.Range(0, 360);
+        spawnPos.x = 15 * Mathf.Sin(theta);
+        spawnPos.y = 15 * Mathf.Cos(theta);
+        Instantiate(cherryPrefab, spawnPos, Quaternion.identity);
     }
 }
