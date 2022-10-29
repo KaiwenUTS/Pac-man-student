@@ -12,6 +12,7 @@ public class Pellet : MonoBehaviour
             if (pacStudent)
             {
                 GameManager.Instance.AddScore(10);
+                GameManager.Instance.EatPellet();
                 Destroy(gameObject);
             }
         }

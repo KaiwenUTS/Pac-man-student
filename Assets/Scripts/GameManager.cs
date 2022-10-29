@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManager : MonoBehaviour
@@ -11,13 +12,29 @@ public class GameManager : MonoBehaviour
         private set;
         get;
     } = null;
+
     private void Awake()
     {
         if (!Instance)
             Instance = this;
         scoreText.text= "<sprite=0>";
         gameTimerText.text = TranslateSecToRichText(0.0f);
+        startPanel.SetActive(true);
+        endPanel.SetActive(false);
+        if (IsOn)
+            return;
         StartCoroutine(WaitForBegin());
+    }
+    private int pelletLeft = 0;
+    public void SetPelletNum(int n)
+    {
+        pelletLeft = n;
+    }
+    public void EatPellet()
+    {
+        --pelletLeft;
+        if (pelletLeft == 0)
+            GameOver();
     }
     private int score = 0;
     [SerializeField]
@@ -59,6 +76,7 @@ public class GameManager : MonoBehaviour
     }
     private float gameStartTime;
     private bool isOn = false;
+    public bool IsOn { get => isOn; private set => isOn = value; }
     [SerializeField]
     private TextMeshProUGUI gameTimerText;
     [SerializeField]
@@ -83,11 +101,26 @@ public class GameManager : MonoBehaviour
         yield return null;
         yield return new WaitForSeconds(1);
         startPanel.SetActive(false);
-        isOn = true;
+        IsOn = true;
+    }
+    [SerializeField]
+    private GameObject endPanel;
+    public void GameOver()
+    {
+        if (!IsOn)
+            return;
+        IsOn = false;
+        endPanel.SetActive(true);
+        StartCoroutine(WaitForExit());
+    }
+    private IEnumerator WaitForExit()
+    {
+        yield return new WaitForSeconds(3);
+        SceneManager.LoadScene("StartScene");
     }
     private void Update()
     {
-        if (!isOn)
+        if (!IsOn)
             return;
         gameTimerText.text = TranslateSecToRichText(Time.realtimeSinceStartup);
         if (powerLeftTime > 0)

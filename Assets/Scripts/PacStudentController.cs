@@ -28,6 +28,8 @@ public class PacStudentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!GameManager.Instance.IsOn)
+            return;
         if (new Vector2(targetPos.x * levelGenerator.delta - transform.position.x, targetPos.y * levelGenerator.delta - transform.position.y).magnitude <= 0.01f)
         {
             lastPos = targetPos;
@@ -91,6 +93,7 @@ public class PacStudentController : MonoBehaviour
         targetPos = pos;
     }
     private Vector2Int startPos = new Vector2Int(-12, 13);
+    private int lifes = 3;
     private void Respawn()
     {
         curentInput = InputKey.Up;
@@ -100,7 +103,11 @@ public class PacStudentController : MonoBehaviour
     }
     public void Die()
     {
-        Respawn();
+        --lifes;
+        if (lifes == 0)
+            GameManager.Instance.GameOver();
+        else
+            Respawn();
     }
     //基于输入求解目标点
     private Vector2Int GetTargetPos(InputKey input)

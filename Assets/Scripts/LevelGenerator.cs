@@ -9,7 +9,7 @@ public class LevelGenerator : MonoBehaviour
     int[,] levelMap =
         {
         {1,2,2,2,2,2,2,2,2,2,2,2,2,2},
-        {2,5,5,5,5,5,5,5,5,5,5,5,5,4},
+        {2,0,5,5,5,5,5,5,5,5,5,5,5,4},
         {2,5,3,4,4,3,5,3,4,4,4,3,5,4},
         {2,6,4,0,0,4,5,4,0,0,0,4,5,4},
         {2,5,3,4,4,3,5,3,4,4,4,3,5,4},
@@ -47,6 +47,7 @@ public class LevelGenerator : MonoBehaviour
         GameObject level = new GameObject();
         level.name = "Level";
         level.transform.position = Vector3.zero;
+        int pelletCounter = 0;
         for (int x = 1 - levelMap.GetLength(1); x <= levelMap.GetLength(1) - 1; ++x)//
         {
             for(int y = 1 - levelMap.GetLength(0); y <= levelMap.GetLength(0) - 1; ++y)//
@@ -60,18 +61,20 @@ public class LevelGenerator : MonoBehaviour
                 curobj.transform.parent = level.transform;
                 if (type == 1)
                 {
-                    if (GetTypeFromXY(x - 1,y) == 2)
+                    if (GetTypeFromXY(x - 1, y) == 2)
                         curobj.transform.Rotate(Vector3.up, 180);
                     if (GetTypeFromXY(x, y + 1) == 2)
                         curobj.transform.Rotate(Vector3.right, 180);
                 }
-                if (type == 3)
+                else if (type == 3)
                 {
                     if (GetTypeFromXY(x - 1, y) == 4 || GetTypeFromXY(x - 1, y) == 3)
                         curobj.transform.Rotate(Vector3.up, 180);
                     if (GetTypeFromXY(x, y + 1) == 4 || GetTypeFromXY(x, y + 1) == 3)
                         curobj.transform.Rotate(Vector3.right, 180);
                 }
+                else if (type == 5)
+                    ++pelletCounter;
                 curobj.GetComponent<SpriteRenderer>().enabled = true;
                 if (curobj.GetComponent<Animator>())
                 {
@@ -79,6 +82,7 @@ public class LevelGenerator : MonoBehaviour
                 }
             }
         }
+        GameManager.Instance.SetPelletNum(pelletCounter);
     }
     public int GetTypeFromXY(int x,int y)
     {
