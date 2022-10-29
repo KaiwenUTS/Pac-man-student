@@ -104,6 +104,7 @@ public class PacStudentController : MonoBehaviour
     public void Die()
     {
         --lifes;
+        GameManager.Instance.UpdateLife(lifes);
         if (lifes == 0)
             GameManager.Instance.GameOver();
         else

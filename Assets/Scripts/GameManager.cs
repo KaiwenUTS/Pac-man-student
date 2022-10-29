@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
             return;
         IsOn = false;
         endPanel.SetActive(true);
-        if (PlayerPrefs.HasKey("Score") && PlayerPrefs.GetInt("Score")<score)
+        if (!PlayerPrefs.HasKey("Score") || (PlayerPrefs.HasKey("Score") && PlayerPrefs.GetInt("Score")<score))
         {
             PlayerPrefs.SetInt("Score", score);
             PlayerPrefs.SetFloat("Time", Time.realtimeSinceStartup - gameStartTime);
@@ -105,6 +105,21 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
         SceneManager.LoadScene("StartScene");
+    }
+    public void OnExitBtnClicked()
+    {
+        SceneManager.LoadScene("StartScene");
+    }
+    [SerializeField]
+    private GameObject[] heartImgs;
+    public void UpdateLife(int n)
+    {
+        if (n <= 2)
+            heartImgs[2].SetActive(false);
+        if (n <= 1)
+            heartImgs[1].SetActive(false);
+        if (n <= 0)
+            heartImgs[0].SetActive(false);
     }
     private void Update()
     {
