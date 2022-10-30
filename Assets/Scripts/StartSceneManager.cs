@@ -25,7 +25,7 @@ public class StartSceneManager : MonoBehaviour
     public void OnLevel1BtnClicked(Button button)
     {
         button.interactable = false;
-        SceneManager.LoadScene("PacStudent");
+        SceneManager.LoadScene("GameScene");
     }
     public void OnLevel2BtnClicked(Button button)
     {
